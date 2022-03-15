@@ -1,24 +1,9 @@
-# ggfront
+# ggWeb 소개
 
-## Project setup
-```
-yarn install
-```
+- 가족 사진을 저장하여 가족끼리 공유할 수 있는 웹 사이트
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## ggfront
+- ggWeb의 Front-end
+- 사진첩 기능(사진 보여주기, 사진 추가 기능)
+- 사진 클릭 시 사진 상세정보 확인 가능(제목, 날짜, 내용)
