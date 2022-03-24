@@ -13,8 +13,5 @@ import Navbar from "@/components/NavBar/Navbar";
 export default {
   name: 'App',
   components: {Navbar},
-  data: () => ({
-    //
-  }),
 };
 </script>

@@ -7,7 +7,10 @@ import TestPage2 from "@/pages/TestPage2";
 import TestPage3 from "@/pages/TestPage3";
 import Login from "@/pages/Login";
 
+import {store} from "@/store/store";
+
 Vue.use(VueRouter)
+
 
 const router = new VueRouter({
     mode: 'history',
@@ -16,6 +19,7 @@ const router = new VueRouter({
             path: '/',
             name: 'Home',
             component: Home,
+
         },
         {
             path: '/login',
@@ -26,6 +30,11 @@ const router = new VueRouter({
             path: '/imageboard',
             name: 'ImageBoard',
             component: ImageBoard,
+            meta: { requiresAuth: true},
+            beforeEnter: (to, from, next) => {
+              if(store.state.loginStore.isLogin) next();
+              else next({name: 'Login'});
+            },
         },
         {
             path: '/testpage',
@@ -43,7 +52,10 @@ const router = new VueRouter({
             component: TestPage3,
         },
     ]
-})
+});
+
+
+
 
 
 export default router

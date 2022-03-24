@@ -13,13 +13,14 @@
         <v-layout wrap class="my-8">
           <v-row class="px-0" dense justify="center">
             <v-dialog
+
                 v-for="(item,i) in img"
                 v-bind:key="i"
                 max-width="80%"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-card
-                    :loading="loading"
+                    loading
                     color="rgb(192, 192, 192, 0.3)"
                     v-bind="attrs"
                     v-on="on"
@@ -28,7 +29,8 @@
                     max-height="200"
                 >
 
-                  <v-img :src="`http://localhost:8080/api/imgboard/img/` + item.img_name" width="200" height="200"/>
+<!--                  <v-img :src="`http://localhost:8080/api/imgboard/img/` + item.img_name" width="200" height="200"/>-->
+                  <img v-auth-image="`http://localhost:8080/api/imgboard/img/` + item.img_name" width="200" height="200"/>
 
                 </v-card>
               </template>
@@ -97,7 +99,7 @@ export default {
             this.img = parse.data;
           })
           .catch((error) => {
-            console.log(error)
+            console.log("이미지 정보 불러오기 에러 : " + error)
           })
           .finally(() => {
 
