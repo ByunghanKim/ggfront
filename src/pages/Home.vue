@@ -2,7 +2,7 @@
   <div id="div-main">
     <v-container fluid style="width: 70%">
       <div id="div-title" class="el">
-        <h1>규리 갤러리</h1>
+        <h1>GG Web</h1>
       </div>
       <div class="el">
         <v-avatar
@@ -10,15 +10,12 @@
             size="300"
         >
           <img
-            src="@/assets/images/profile.jpg"
-            alt="gyuri"
+            src="@/assets/images/yellow.png"
+            alt=""
           >
         </v-avatar>
       </div>
       <div id="div-go-button" class="el">
-        <v-btn
-          v-on:click="goBoard"
-        >보러가기</v-btn>
       </div>
     </v-container>
  </div>

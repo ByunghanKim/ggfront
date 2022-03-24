@@ -1,51 +1,17 @@
 <template>
   <div id="div-main">
-    <v-container fluid style="width: 70%">
-      <div id="title" class="el">
-        <h1>사진첩 TestPage</h1>
-      </div>
-      <div class="text-center"
-           id="images"
-      >
-        <v-dialog
-            width="500"
-            v-for="(item,i) in img"
-            v-bind:key="i"
-
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-card
-                max-width="200"
-                align="center"
-                v-bind="attrs"
-                v-on="on"
-            >
-              <img :src="`http://localhost:8080/api/imgboard/img/` + item.img_name" width="100" />
-            </v-card>
-          </template>
-
-          <v-card>
-            <img :src="`http://localhost:8080/api/imgboard/img/` + item.img_name" width="400">
-            <v-card>
-            {{item.title}}
-            {{item.date}}
-            {{item.content}}
-            </v-card>
-          </v-card>
-        </v-dialog>
-      </div>
-    </v-container>
-
-
+    <h1>testpage</h1>
+    <img :src="imgList[4]">
   </div>
 </template>
 
 <script>
 
+import axios from "axios";
+
 export default {
   name: "TestPage",
   created() {
-
     this.getData();
   },
   mounted() {
@@ -54,23 +20,42 @@ export default {
   data() {
     return {
       img: [],
+      imgList: [],
 
     }
   },
   methods: {
     getData() {
       this.$axios.get("http://localhost:8080/api/imgboard/load")
-      .then((res) => {
-        const parse = JSON.parse(JSON.stringify(res));
-        this.img = parse.data;
-      })
-          .catch((error)=> {
+          .then((res) => {
+            const parse = JSON.parse(JSON.stringify(res));
+            this.img = parse.data;
+            for (let i = 0; i < this.img.length; i++) {
+              axios.get("http://localhost:8080/api/imgboard/img/" + this.img[i].img_name,{responseType:'arraybuffer'})
+                  .then((res) => {
+
+                    //let front = "data:image;base64,";
+                    let buffer = Buffer.from(res.data, 'base64');
+                    let blob = new Blob([buffer], {type: 'image/jpeg'})
+                    let data = URL.createObjectURL(blob);
+
+                    console.log(data);
+                    this.imgList.push(data);
+                  })
+                  .catch((err) => {
+                    console.log(err)
+                  });
+            }
+          })
+          .catch((error) => {
             console.log(error)
           })
-          .finally(()=>{
+          .finally(() => {
             console.log("항상 마지막에 실행");
+            console.log(this.imgList)
           });
-    }
+    },
+
   },
 }
 </script>

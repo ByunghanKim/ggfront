@@ -21,13 +21,23 @@
         <h3 v-on:click="goTestPage3">임시메뉴3</h3>
       </div>
       <v-spacer/>
-      <div id="login">
+      <h5 v-if="logoutButton_hasToken">{{getMemberName}}</h5>
+      <div id="login" v-if="loginButton_hasToken">
         <v-btn
           color="black"
           text=""
           v-on:click="goLogin"
         >
         <h3>LOGIN</h3>
+        </v-btn>
+      </div>
+      <div id="logout" v-if="logoutButton_hasToken" >
+        <v-btn
+            color="black"
+            text=""
+            v-on:click="goLogout"
+        >
+          <h3>LOGOUT</h3>
         </v-btn>
       </div>
     </v-app-bar>
@@ -37,25 +47,65 @@
 <script>
 export default {
   name: "Navbar",
+  computed: {
+    loginButton_hasToken() {
+      if(this.$store.state.loginStore.isLogin === true) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    logoutButton_hasToken() {
+      if(this.$store.state.loginStore.isLogin === true) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    getMemberName() {
+      return this.$store.state.loginStore.name;
+    }
+  },
   methods: {
     goHome() {
-      this.$router.push("/");
+      if(this.$route.path != "/") {
+        this.$router.push("/");
+      }
     },
     goImageBoard() {
-      this.$router.push("/imageboard");
+      if(this.$route.path != "/imageboard") {
+        this.$router.push("/imageboard").catch(err=>{return err;});
+      }
     },
     goLogin() {
+      if(this.$route.path != '/login') {
+        this.$router.push("/login");
+      }
+    },
+    goLogout() {
+      this.$store.commit("loginStore/set_id", '');
+      this.$store.commit("loginStore/set_name", '');
+      this.$store.commit("loginStore/set_token", '');
+      this.$store.commit("loginStore/set_isLogin", 'false');
+
       this.$router.push("/login");
     },
     goTestPage() {
-      this.$router.push("/testpage");
+      if(this.$route.path != '/testpage') {
+        this.$router.push("/testpage");
+      }
     },
     goTestPage2() {
-      this.$router.push("/testpage2");
+      if(this.$route.path != '/testpage2') {
+        this.$router.push("/testpage2");
+      }
     },
     goTestPage3() {
-      this.$router.push("/testpage3");
+      if(this.$route.path != '/testpage3') {
+        this.$router.push("/testpage3");
+      }
     },
+
   }
 }
 </script>

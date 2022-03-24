@@ -19,7 +19,6 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-card
-                    :loading="loading"
                     color="rgb(192, 192, 192, 0.3)"
                     v-bind="attrs"
                     v-on="on"
@@ -27,8 +26,9 @@
                     max-width="200"
                     max-height="200"
                 >
+<!--                  <v-img :src="`http://localhost:8080/api/imgboard/img/` + item.img_name" width="200" height="200"/>-->
+                  <v-img :src="imgList[i]" width="200" height="200"/>
 
-                  <v-img :src="`http://localhost:8080/api/imgboard/img/` + item.img_name" width="200" height="200"/>
 
                 </v-card>
               </template>
@@ -41,8 +41,11 @@
               >
                 <v-row no-gutters class="fill-height" align="center">
                   <v-col cols="8" style="border: 1px solid black;">
+<!--                    <v-img :src="`http://localhost:8080/api/imgboard/img/` + item.img_name" max-height="750"/>-->
+                    <v-img :src="imgList[i]" max-height="750"/>
 
-                    <v-img :src="`http://localhost:8080/api/imgboard/img/` + item.img_name" max-height="750"/>
+
+
                   </v-col>
                   <v-col style="border: 1px solid black;">
                     <v-card
@@ -55,6 +58,9 @@
                       <v-card-text align="center">
                         {{ item.content }}
                       </v-card-text>
+                      <v-btn
+                          @click="close"
+                      >X</v-btn>
                     </v-card>
                   </v-col>
                 </v-row>
@@ -64,20 +70,19 @@
         </v-layout>
       </v-container>
     </v-container>
-
-
   </div>
 </template>
 
 <script>
 
 import UploadButton from "@/components/Upload/UploadButton";
+import axios from "axios";
+import {store} from "@/store/store";
 
 export default {
   name: "ImageBoard",
   components: {UploadButton},
   created() {
-
     this.getData();
   },
   mounted() {
@@ -86,23 +91,45 @@ export default {
   data() {
     return {
       img: [],
+      imgList: [],
 
     }
   },
   methods: {
     getData() {
+      axios.defaults.headers.common['Authorization'] = store.state.loginStore.token;
       this.$axios.get("http://localhost:8080/api/imgboard/load")
-          .then((res) => {
+          .then(async (res) => {
             const parse = JSON.parse(JSON.stringify(res));
+
             this.img = parse.data;
+
+            for (let i = 0; i < this.img.length; i++) {
+              await axios.get("http://localhost:8080/api/imgboard/img/" + this.img[i].img_name, {responseType: 'arraybuffer'})
+                  .then((res) => {
+
+                    //let front = "data:image;base64,";
+                    let buffer = Buffer.from(res.data, 'base64');
+                    let blob = new Blob([buffer], {type: 'image/jpeg'})
+                    let data = URL.createObjectURL(blob);
+
+                    console.log(data);
+                    this.imgList.push(data);
+                  })
+                  .catch((err) => {
+                    console.log(err)
+                  });
+            }
+
           })
           .catch((error) => {
-            console.log(error)
+            console.log("wegwegweg"+error)
           })
           .finally(() => {
 
           });
-    }
+    },
+
   },
 }
 </script>
