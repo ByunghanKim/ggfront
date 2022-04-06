@@ -15,10 +15,8 @@
       </v-toolbar-title>
       <div id="menu">
         <h3 v-on:click="goHome">홈</h3>
+        <h3 v-on:click="goNoticeBoard">공지사항</h3>
         <h3 v-on:click="goImageBoard">사진첩</h3>
-        <h3 v-on:click="goTestPage">임시메뉴</h3>
-        <h3 v-on:click="goTestPage2">임시메뉴2</h3>
-        <h3 v-on:click="goTestPage3">임시메뉴3</h3>
       </div>
       <v-spacer/>
       <h5 v-if="logoutButton_hasToken">{{getMemberName}}</h5>
@@ -77,33 +75,25 @@ export default {
         this.$router.push("/imageboard").catch(err=>{return err;});
       }
     },
+    goNoticeBoard() {
+      if(this.$route.path != "/notice") {
+        this.$router.push("/notice").catch(err=>{return err;});
+      }
+    },
     goLogin() {
       if(this.$route.path != '/login') {
         this.$router.push("/login");
       }
     },
     goLogout() {
+
       this.$store.commit("loginStore/set_id", '');
       this.$store.commit("loginStore/set_name", '');
       this.$store.commit("loginStore/set_token", '');
-      this.$store.commit("loginStore/set_isLogin", 'false');
+      this.$store.commit("loginStore/set_isLogin", false);
+      this.$store.commit('loginStore/set_role', '');
 
       this.$router.push("/login");
-    },
-    goTestPage() {
-      if(this.$route.path != '/testpage') {
-        this.$router.push("/testpage");
-      }
-    },
-    goTestPage2() {
-      if(this.$route.path != '/testpage2') {
-        this.$router.push("/testpage2");
-      }
-    },
-    goTestPage3() {
-      if(this.$route.path != '/testpage3') {
-        this.$router.push("/testpage3");
-      }
     },
 
   }

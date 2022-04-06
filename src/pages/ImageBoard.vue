@@ -1,6 +1,6 @@
 <template>
   <div id="div-main">
-    <v-container fluid style="width: 80rem" class="my-16">
+    <v-container fluid style="width: 80%;" class="my-16">
       <v-row justify="center">
         <h1>사진첩</h1>
       </v-row>
@@ -58,9 +58,6 @@
                       <v-card-text align="center">
                         {{ item.content }}
                       </v-card-text>
-                      <v-btn
-                          @click="close"
-                      >X</v-btn>
                     </v-card>
                   </v-col>
                 </v-row>
@@ -113,17 +110,27 @@ export default {
                     let blob = new Blob([buffer], {type: 'image/jpeg'})
                     let data = URL.createObjectURL(blob);
 
-                    console.log(data);
+                    //console.log(data);
                     this.imgList.push(data);
                   })
                   .catch((err) => {
-                    console.log(err)
+                    console.log(err.response)
                   });
             }
 
           })
           .catch((error) => {
-            console.log("wegwegweg"+error)
+            console.log(error.response);
+            alert("로그인 시간 만료");
+            this.$store.commit("loginStore/set_id", '');
+            this.$store.commit("loginStore/set_name", '');
+            this.$store.commit("loginStore/set_token", '');
+            this.$store.commit("loginStore/set_isLogin", false);
+            this.$store.commit('loginStore/set_role', '');
+
+            this.$router.go(0);
+            this.$router.push("/login");
+
           })
           .finally(() => {
 
