@@ -76,6 +76,7 @@ export default {
                   this.$store.commit('loginStore/set_isLogin', true);
                   this.$store.commit('loginStore/set_id', res.data.id);
                   this.$store.commit('loginStore/set_name', res.data.name);
+                  this.$store.commit('loginStore/set_role', res.data.roles);
 
                   this.$router.push("/");
 
@@ -84,7 +85,8 @@ export default {
               this.$store.commit("loginStore/set_id", '');
               this.$store.commit("loginStore/set_name", '');
               this.$store.commit("loginStore/set_token", '');
-              this.$store.commit("loginStore/set_isLogin", 'false');
+              this.$store.commit("loginStore/set_isLogin", false);
+              this.$store.commit('loginStore/set_role', '');
 
 
               alert("회원 정보 가져오기 에러 입니다. " +
@@ -93,17 +95,19 @@ export default {
 
           }).catch(error => {
         alert("로그인 실패 아이디 비밀번호를 확인하세요. 에러 : " + error);
+        console.log(error.response);
         this.pw = "";
         this.$store.commit("loginStore/set_id", '');
         this.$store.commit("loginStore/set_name", '');
         this.$store.commit("loginStore/set_token", '');
-        this.$store.commit("loginStore/set_isLogin", 'false');
+        this.$store.commit("loginStore/set_isLogin", false);
+        this.$store.commit('loginStore/set_role', '');
       }).finally(() => {
 
       });
     },
     join() {
-
+      this.$router.push('/Join');
     }
   }
 

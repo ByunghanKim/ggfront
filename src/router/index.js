@@ -2,12 +2,14 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/pages/Home";
 import ImageBoard from "@/pages/ImageBoard";
-import TestPage from "@/pages/TestPage";
-import TestPage2 from "@/pages/TestPage2";
-import TestPage3 from "@/pages/TestPage3";
 import Login from "@/pages/Login";
 
+import NoticeBoard from "@/pages/NoticeBoard";
 import {store} from "@/store/store";
+import Content from "@/pages/Content";
+import BoardWrite from "@/pages/BoardWrite";
+import BoardUpdate from "@/pages/BoardUpdate";
+import Join from "@/pages/Join";
 
 Vue.use(VueRouter)
 
@@ -30,27 +32,46 @@ const router = new VueRouter({
             path: '/imageboard',
             name: 'ImageBoard',
             component: ImageBoard,
-            meta: { requiresAuth: true},
             beforeEnter: (to, from, next) => {
-              if(store.state.loginStore.isLogin) next();
-              else next({name: 'Login'});
+              if(store.state.loginStore.isLogin) {next();}
+              else {next({name: 'Login'});}
             },
         },
         {
-            path: '/testpage',
-            name: 'TestPage',
-            component: TestPage,
+            path: '/notice',
+            name: 'Notice',
+            component: NoticeBoard,
         },
         {
-            path: '/testpage2',
-            name: 'TestPage2',
-            component: TestPage2,
+            path: '/board/detail',
+            name: 'Content',
+            component: Content,
+            props: (route) => ({boardType: route.query.boardType, num:route.query.num}),
         },
         {
-            path: '/testpage3',
-            name: 'TestPage3',
-            component: TestPage3,
+            path:'/board/write',
+            name: 'BoardWrite',
+            component: BoardWrite,
+            props: (route) => ({boardType: route.query.boardType}),
         },
+        {
+            path:'/board/update',
+            name: 'BoardUpdate',
+            component: BoardUpdate,
+            props: (route) => (
+                {
+                    boardType: route.query.boardType,
+                    num: route.query.num,
+                    content: route.query.content,
+                }
+            ),
+        },
+        {
+            path: '/join',
+            name: 'Join',
+            component: Join,
+        }
+
     ]
 });
 

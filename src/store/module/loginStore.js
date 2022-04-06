@@ -6,6 +6,7 @@ const loginStore = {
         name: '',
         token: '',
         isLogin: false,
+        role: '',
 
     },
     getters: {
@@ -22,6 +23,9 @@ const loginStore = {
         },
         set_isLogin(state, payload) {
             state.isLogin = payload;
+        },
+        set_role(state, payload) {
+            state.role = payload;
         }
     },
     actions: {
