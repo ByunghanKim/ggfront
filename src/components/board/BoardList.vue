@@ -17,7 +17,7 @@
         <td>{{ item.num }}</td>
         <td >
           <a @click="goBoardDetail(item.num)">{{ item.title }}</a>&nbsp;
-          <div v-if="item.reply_num > 0">[{{item.reply_num}}]</div>
+          <span v-if="item.reply_num > 0">[{{item.reply_num}}]</span>
         </td>
         <td>{{ item.writer }}</td>
         <td>{{ item.date }}</td>

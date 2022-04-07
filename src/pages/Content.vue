@@ -1,6 +1,6 @@
 <template>
   <v-container style="width: 80%">
-    <ContentDetail :content="content" :board-type="boardType"></ContentDetail>
+    <ContentDetail :content="content" :board-type="boardType" :reply="reply"></ContentDetail>
   </v-container>
 </template>
 
@@ -16,10 +16,12 @@ export default {
   },
   created() {
     this.load();
+    this.loadReply();
   },
   data() {
     return {
       content: {},
+      reply: null,
     }
   },
   methods: {
@@ -30,8 +32,10 @@ export default {
           num: parseInt(this.num),
         }
       }).then((res) => {
+
         this.content = res.data;
         this.convertDate();
+
       }).catch((err) => {
         console.log(err);
       })
@@ -41,6 +45,20 @@ export default {
       let newDate = new Date(date);
       this.content.date = newDate.toLocaleString();
 
+    },
+    loadReply() {
+      axios.get("http://localhost:8080/api/board/freeboard/load/reply", {
+        params: {
+          boardType: this.boardType,
+          num: parseInt(this.num),
+        }
+      })
+          .then((res)=>{
+            this.reply = res.data;
+          })
+          .catch((err)=>{
+            console.log(err);
+          });
     }
   }
 }

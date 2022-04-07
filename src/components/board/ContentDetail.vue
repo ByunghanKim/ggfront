@@ -56,7 +56,14 @@
         </v-btn>
       </v-col>
     </v-row>
-    <Reply class="mt-3"></Reply>
+
+    <Reply
+        class="mt-3"
+        v-for="(item,i) in reply"
+        v-bind:key="i"
+        :reply="item"
+    ></Reply>
+
     <v-row no-gutters class="mt-3" v-if="userId !== ''">
       <v-col cols="11">
         <v-textarea
@@ -100,7 +107,7 @@ export default {
   components: {Reply},
   props: {
     content: Object,
-    reply: [Object],
+    reply: Array,
     boardType: String,
   },
   computed: {
@@ -168,16 +175,20 @@ export default {
     sendReply() {
 
       const fd = new FormData();
+
+      fd.append("boardType", this.boardType);
       fd.append("id", this.userId);
       fd.append("content", this.replyWithBrTags);
       fd.append("contentNum", this.content.num);
 
-      axios.post()
-          .then(()=>{
-
+      axios.post("http://localhost:8080/api/board/freeboard/insert/reply",fd)
+          .then((res)=>{
+            if(res.status === 200) {
+              this.$router.history.go(0);
+            }
           })
-          .catch(()=>{
-
+          .catch((err)=>{
+            console.log(err);
           });
 
     }
