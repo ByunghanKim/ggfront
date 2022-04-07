@@ -151,9 +151,21 @@ export default {
     },
     validate() {
       if (this.$refs.form.validate()) {
-        console.log("굿");
-      } else {
-        console.log("낫굿");
+        const fd = new FormData();
+        fd.append("id", this.id);
+        fd.append("pw", this.pw);
+        fd.append("name", this.name);
+
+        axios.post("http://localhost:8080/api/member/join",fd)
+            .then((res)=>{
+              if(res.status === 200) {
+                alert("회원가입이 완료되었습니다.");
+                this.$router.push("/login");
+              }
+            })
+            .catch((err)=>{
+              console.log(err);
+            });
       }
     },
     reset() {
